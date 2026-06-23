@@ -1,8 +1,29 @@
+import { useState } from 'react'
+import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
+
 function ProductCard({ product }) {
+    const { addToCart } = useCart()
+    const { user } = useAuth()
+    const [added, setAdded] = useState(false)
+
+    const handleAddToCart = async () => {
+        if (!user) {
+            alert('Войдите чтобы добавить товар в корзину')
+            return
+        }
+
+        const success = await addToCart(product)
+
+        if (success) {
+            // Показываем визуальный отклик — кнопка меняется на ✓ на секунду
+            setAdded(true)
+            setTimeout(() => setAdded(false), 1000)
+        }
+    }
+
     return (
         <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
-
-            {/* Изображение товара — пока заглушка, картинок у нас нет в БД */}
             <div className="bg-gray-700 h-20 flex items-center justify-center text-3xl">
                 🥦
             </div>
@@ -18,12 +39,17 @@ function ProductCard({ product }) {
           <span className="text-white font-medium">
             {product.price} ₽
           </span>
-                    <button className="bg-orange-500 text-white w-6 h-6 rounded-full text-base leading-none hover:bg-orange-600">
-                        +
+                    <button
+                        onClick={handleAddToCart}
+                        className={`w-6 h-6 rounded-full text-white text-base leading-none transition-colors
+              ${added
+                            ? 'bg-green-500'
+                            : 'bg-orange-500 hover:bg-orange-600'}`}
+                    >
+                        {added ? '✓' : '+'}
                     </button>
                 </div>
             </div>
-
         </div>
     )
 }
