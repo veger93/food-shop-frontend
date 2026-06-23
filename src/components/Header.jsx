@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { useCart } from '../context/CartContext'
 import AuthModal from './AuthModal'
 
-function Header() {
-    // Показывать ли модальное окно
+function Header({ onCartClick }) {
     const [showModal, setShowModal] = useState(false)
-
-    // Получаем данные пользователя и функцию logout из контекста
     const { user, logout } = useAuth()
+    const { totalItems } = useCart()
 
     return (
         <>
@@ -24,14 +23,16 @@ function Header() {
                 </nav>
 
                 <div className="flex gap-3 items-center">
-                    <div className="bg-gray-800 border border-gray-700 rounded-full px-3 py-1 text-sm text-gray-300 flex items-center gap-2 cursor-pointer">
+                    <div
+                        onClick={onCartClick}
+                        className="bg-gray-800 border border-gray-700 rounded-full px-3 py-1 text-sm text-gray-300 flex items-center gap-2 cursor-pointer hover:border-orange-500 transition-colors"
+                    >
                         🛍 Корзина
                         <span className="bg-orange-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-              0
+              {totalItems}
             </span>
                     </div>
 
-                    {/* Показываем разный UI в зависимости от того залогинен пользователь или нет */}
                     {user ? (
                         <div className="flex items-center gap-2">
               <span className="text-sm text-gray-300">
@@ -56,7 +57,6 @@ function Header() {
 
             </header>
 
-            {/* Рендерим модальное окно только если showModal = true */}
             {showModal && (
                 <AuthModal onClose={() => setShowModal(false)} />
             )}
