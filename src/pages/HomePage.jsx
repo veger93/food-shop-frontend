@@ -6,7 +6,7 @@ import ProductCard from '../components/ProductCard'
 // Если нет — показываем дефолтный
 const DEFAULT_EMOJI = '🛒'
 
-function HomePage() {
+function HomePage({ showToast }) {
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true)
@@ -175,7 +175,7 @@ function HomePage() {
                 ) : (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         {products.map(product => (
-                            <ProductCard key={product.id} product={product} />
+                            <ProductCard key={product.id} product={product} showToast={showToast} />
                         ))}
                     </div>
                 )}

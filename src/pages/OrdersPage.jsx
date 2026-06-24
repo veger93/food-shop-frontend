@@ -140,7 +140,7 @@ function OrderCard({ order, onCancel }) {
 }
 
 // Главный компонент страницы
-function OrdersPage({ onBack }) {
+function OrdersPage({ onBack, showToast }) {
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
     const { user } = useAuth()
@@ -164,18 +164,15 @@ function OrdersPage({ onBack }) {
     }
 
     const handleCancel = async (orderId) => {
-        // Спрашиваем подтверждение перед отменой
-        if (!window.confirm('Отменить заказ?')) return
-
         try {
             await api.patch(`/api/orders/${orderId}/cancel`)
-            // Обновляем список заказов после отмены
+            showToast('Заказ отменён', 'info')
             fetchOrders()
         } catch (err) {
-            alert(err.response?.data?.message || 'Ошибка отмены заказа')
+            showToast(err.response?.data?.message || 'Ошибка отмены заказа', 'error')
         }
     }
-
+    
     if (!user) {
         return (
             <div className="px-5 py-10 text-center">
@@ -220,6 +217,7 @@ function OrdersPage({ onBack }) {
                             key={order.id}
                             order={order}
                             onCancel={handleCancel}
+                            showToast={showToast}
                         />
                     ))}
                 </div>

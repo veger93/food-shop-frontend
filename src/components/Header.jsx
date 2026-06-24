@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
 import AuthModal from './AuthModal'
 
-function Header({ onCartClick, onOrdersClick }) {
+function Header({ onCartClick, onOrdersClick, onHomeClick }) {
     const [showModal, setShowModal] = useState(false)
     const { user, logout } = useAuth()
     const { totalItems } = useCart()
@@ -17,9 +17,18 @@ function Header({ onCartClick, onOrdersClick }) {
                 </div>
 
                 <nav className="hidden md:flex gap-4 text-sm text-gray-400">
-                    <span className="cursor-pointer hover:text-white">Каталог</span>
-                    <span className="cursor-pointer hover:text-white">Акции</span>
-                    <span className="cursor-pointer hover:text-white">О нас</span>
+                    <span 
+                        onClick={onHomeClick} 
+                        className="cursor-pointer hover:text-white transition-colors"
+                    >
+                        Каталог
+                    </span>
+                    <span className="cursor-pointer hover:text-white transition-colors text-gray-600">
+                        Акции
+                    </span>
+                    <span className="cursor-pointer hover:text-white transition-colors text-gray-600">
+                        О нас
+                    </span>
                 </nav>
 
                 <div className="flex gap-3 items-center">
@@ -27,40 +36,41 @@ function Header({ onCartClick, onOrdersClick }) {
                         onClick={onCartClick}
                         className="bg-gray-800 border border-gray-700 rounded-full px-3 py-1 text-sm text-gray-300 flex items-center gap-2 cursor-pointer hover:border-orange-500 transition-colors"
                     >
-                        🛍 Корзина
-                        <span className="bg-orange-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                            🛍 Корзина
+                            <span
+                                className="bg-orange-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
               {totalItems}
             </span>
-                    </div>
+                        </div>
 
-                    {user ? (
-                        <div className="flex items-center gap-3">
+                        {user ? (
+                            <div className="flex items-center gap-3">
               <span className="text-sm text-gray-300">
                 👤 {user.username}
               </span>
-                            {/* Ссылка на заказы */}
+                                {/* Ссылка на заказы */}
+                                <button
+                                    onClick={onOrdersClick}
+                                    className="text-sm text-gray-400 hover:text-orange-500 transition-colors"
+                                >
+                                    Заказы
+                                </button>
+                                <button
+                                    onClick={logout}
+                                    className="text-sm text-gray-400 hover:text-white transition-colors"
+                                >
+                                    Выйти
+                                </button>
+                            </div>
+                        ) : (
                             <button
-                                onClick={onOrdersClick}
-                                className="text-sm text-gray-400 hover:text-orange-500 transition-colors"
+                                onClick={() => setShowModal(true)}
+                                className="bg-orange-500 text-white text-sm px-4 py-1.5 rounded-full font-medium hover:bg-orange-600 transition-colors"
                             >
-                                Заказы
+                                Войти
                             </button>
-                            <button
-                                onClick={logout}
-                                className="text-sm text-gray-400 hover:text-white transition-colors"
-                            >
-                                Выйти
-                            </button>
-                        </div>
-                    ) : (
-                        <button
-                            onClick={() => setShowModal(true)}
-                            className="bg-orange-500 text-white text-sm px-4 py-1.5 rounded-full font-medium hover:bg-orange-600 transition-colors"
-                        >
-                            Войти
-                        </button>
-                    )}
-                </div>
+                        )}
+                    </div>
 
             </header>
 
