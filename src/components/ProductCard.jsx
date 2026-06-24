@@ -35,8 +35,18 @@ function ProductCard({ product, showToast }) {
 
     return (
         <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden hover:border-gray-600 transition-colors">
-            <div className="h-20 flex items-center justify-center text-4xl bg-gray-700/50">
-                {emoji}
+            <div className="h-24 flex items-center justify-center bg-gray-700/50 overflow-hidden">
+                {product.imageUrl ? (
+                    <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                    />
+                ) : (
+                    <span className="text-4xl">
+      {CATEGORY_EMOJI[product.categoryName] || '🛒'}
+    </span>
+                )}
             </div>
             <div className="p-2.5">
                 <div className="text-sm font-medium text-white mb-0.5 leading-tight">
