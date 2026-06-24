@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 
-// Словарь эмодзи по названию категории
 const CATEGORY_EMOJI = {
     'Овощи': '🥦',
     'Фрукты': '🍎',
@@ -12,20 +11,23 @@ const CATEGORY_EMOJI = {
     'Напитки': '🧃',
 }
 
-function ProductCard({ product }) {
+function ProductCard({ product, showToast }) {
     const { addToCart } = useCart()
     const { user } = useAuth()
     const [added, setAdded] = useState(false)
 
     const handleAddToCart = async () => {
         if (!user) {
-            alert('Войдите чтобы добавить товар в корзину')
+            showToast('Войдите чтобы добавить товар в корзину', 'info')
             return
         }
         const success = await addToCart(product)
         if (success) {
             setAdded(true)
+            showToast(`${product.name} добавлен в корзину`, 'success')
             setTimeout(() => setAdded(false), 1000)
+        } else {
+            showToast('Ошибка добавления в корзину', 'error')
         }
     }
 
@@ -33,11 +35,9 @@ function ProductCard({ product }) {
 
     return (
         <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden hover:border-gray-600 transition-colors">
-
-            <div className="bg-gray-750 h-20 flex items-center justify-center text-4xl bg-gray-700/50">
+            <div className="h-20 flex items-center justify-center text-4xl bg-gray-700/50">
                 {emoji}
             </div>
-
             <div className="p-2.5">
                 <div className="text-sm font-medium text-white mb-0.5 leading-tight">
                     {product.name}

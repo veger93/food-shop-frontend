@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import api from '../api/axios'
 import { useState } from 'react'
 
-function CartPage({ onBack }) {
+function CartPage({ onBack, showToast }) {
     // const { cartItems, totalAmount, updateQuantity, removeFromCart } = useCart()
     const { user } = useAuth()
     const [address, setAddress] = useState('')
@@ -13,7 +13,7 @@ function CartPage({ onBack }) {
 
     const handleCheckout = async () => {
         if (!address.trim()) {
-            alert('Введите адрес доставки')
+            showToast('Введите адрес доставки')
             return
         }
 
@@ -25,7 +25,7 @@ function CartPage({ onBack }) {
             await fetchCart() // ← добавь эту строку — перезагружаем корзину с сервера
             setOrderSuccess(true)
         } catch (err) {
-            alert(err.response?.data?.message || 'Ошибка оформления заказа')
+            showToast(err.response?.data?.message || 'Ошибка оформления заказа')
         } finally {
             setOrdering(false)
         }
