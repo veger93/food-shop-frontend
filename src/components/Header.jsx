@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
 import AuthModal from './AuthModal'
 
-function Header({ onCartClick }) {
+function Header({ onCartClick, onOrdersClick }) {
     const [showModal, setShowModal] = useState(false)
     const { user, logout } = useAuth()
     const { totalItems } = useCart()
@@ -34,10 +34,17 @@ function Header({ onCartClick }) {
                     </div>
 
                     {user ? (
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
               <span className="text-sm text-gray-300">
                 👤 {user.username}
               </span>
+                            {/* Ссылка на заказы */}
+                            <button
+                                onClick={onOrdersClick}
+                                className="text-sm text-gray-400 hover:text-orange-500 transition-colors"
+                            >
+                                Заказы
+                            </button>
                             <button
                                 onClick={logout}
                                 className="text-sm text-gray-400 hover:text-white transition-colors"
