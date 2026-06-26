@@ -35,7 +35,7 @@ function ProductCard({ product, showToast }) {
 
     return (
         <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden hover:border-gray-600 transition-colors">
-            <div className="h-24 flex items-center justify-center bg-gray-700/50 overflow-hidden">
+            <div className="h-24 flex items-center justify-center bg-gray-700/50 overflow-hidden rounded-t-lg">
                 {product.imageUrl ? (
                     <img
                         src={product.imageUrl}

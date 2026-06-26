@@ -1,16 +1,68 @@
-# React + Vite
+# 🛒 FreshDrop — онлайн магазин продуктов
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Fullstack приложение для заказа продуктов с доставкой.
 
-Currently, two official plugins are available:
+## Стек технологий
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Backend:**
+- Java 17, Spring Boot 4.x
+- Spring Security + JWT авторизация
+- Spring Cloud Gateway (API Gateway)
+- PostgreSQL + Spring Data JPA / Hibernate
+- Gradle (Groovy DSL)
 
-## React Compiler
+**Frontend:**
+- React 19 + Vite
+- Tailwind CSS
+- Axios
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Архитектура
 
-## Expanding the ESLint configuration
+Приложение построено на микросервисной архитектуре:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Сервис | Порт | Назначение |
+|---|---|---|
+| api-gateway | 8080 | Роутинг, JWT фильтрация |
+| auth-service | 8081 | Регистрация, логин, JWT токены |
+| product-service | 8082 | Каталог товаров и категорий |
+| order-service | 8083 | Корзина и заказы |
+| delivery-service | 8084 | Адреса и статус доставки |
+| file-service | 8085 | Загрузка картинок (Cloudinary) |
+| frontend | 5173 | React SPA |
+
+## Функциональность
+
+- Регистрация и авторизация пользователей (JWT)
+- Каталог товаров с фильтрацией по категориям
+- Поиск товаров
+- Корзина с изменением количества
+- Оформление и отмена заказов
+- История заказов
+- Загрузка изображений через Cloudinary
+
+## Запуск локально
+
+### Требования
+- Java 17+
+- Node.js 20+
+- PostgreSQL 15+
+
+### База данных
+```bash
+docker run --name freshdrop-db \
+  -e POSTGRES_PASSWORD=secret \
+  -e POSTGRES_DB=foodshop_db \
+  -p 5432:5432 -d postgres:15
+```
+
+### Backend — запускай каждый сервис в IntelliJ IDEA
+Порядок запуска: auth-service → product-service → order-service → delivery-service → file-service → api-gateway
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Открой http://localhost:5173
